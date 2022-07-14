@@ -16,13 +16,13 @@ export default class PipelineConstruct extends Construct {
     .account(account)
     .region(region)
     .addOns(new blueprints.ClusterAutoScalerAddOn)
-    .teams(new TeamPlatform(account), new TeamApplication('sterling',account));
+    .teams(new TeamPlatform(account), new TeamApplication('burnham',account), new TeamApplication('carmen',account), new TeamApplication('riker',account));
   
     const repoUrl = 'https://github.com/dmatthews-uturn/eks-blueprints-workloads.git';
 
     const bootstrapRepo : blueprints.ApplicationRepository = {
         repoUrl,
-        targetRevision: 'workshop',
+        targetRevision: 'deployable',
     }  
   
     const devBootstrapArgo = new blueprints.ArgoCDAddOn({
