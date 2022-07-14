@@ -18,6 +18,32 @@ export default class PipelineConstruct extends Construct {
     .addOns(new blueprints.ClusterAutoScalerAddOn)
     .teams(new TeamPlatform(account), new TeamApplication('sterling',account));
   
+    const repoUrl = 'https://github.com/dmatthews-uturn/eks-blueprints-workloads.git';
+
+    const bootstrapRepo : blueprints.ApplicationRepository = {
+        repoUrl,
+        targetRevision: 'workshop',
+    }  
+  
+    const devBootstrapArgo = new blueprints.ArgoCDAddOn({
+        bootstrapRepo: {
+            ...bootstrapRepo,
+            path: 'envs/dev'
+        },
+    });
+    const testBootstrapArgo = new blueprints.ArgoCDAddOn({
+        bootstrapRepo: {
+            ...bootstrapRepo,
+            path: 'envs/test'
+        },
+    });
+    const prodBootstrapArgo = new blueprints.ArgoCDAddOn({
+        bootstrapRepo: {
+            ...bootstrapRepo,
+            path: 'envs/prod'
+        },
+    });
+    
     blueprints.CodePipelineStack.builder()
       .name("eks-blackbelt-capstone-pipeline")
       .owner("dmatthews-uturn")
@@ -29,9 +55,9 @@ export default class PipelineConstruct extends Construct {
       .wave({
         id: "envs",
         stages: [
-          { id: "dev", stackBuilder: blueprint.clone('us-west-2', account)},
-          { id: "test", stackBuilder: blueprint.clone('us-east-2', account)},
-          { id: "prod", stackBuilder: blueprint.clone('us-east-1', account)}
+          { id: "dev", stackBuilder: blueprint.clone('us-west-2', account).addOns(devBootstrapArgo)},
+          { id: "test", stackBuilder: blueprint.clone('us-east-2', account).addOns(testBootstrapArgo)},
+          { id: "prod", stackBuilder: blueprint.clone('us-east-1', account).addOns(prodBootstrapArgo)}
         ]
       })
       .build(scope, id+'-stack', {env});
