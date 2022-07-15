@@ -15,8 +15,16 @@ export default class PipelineConstruct extends Construct {
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
     .region(region)
-    .addOns(new blueprints.ClusterAutoScalerAddOn)
-    .teams(new TeamPlatform(account), new TeamApplication('burnham',account), new TeamApplication('carmen',account), new TeamApplication('riker',account));
+    .addOns(new blueprints.CalicoAddOn,
+    new blueprints.MetricsServerAddOn,
+    new blueprints.ClusterAutoScalerAddOn,
+    new blueprints.ContainerInsightsAddOn,
+    new blueprints.AwsLoadBalancerControllerAddOn(),
+    new blueprints.VpcCniAddOn(),
+    new blueprints.CoreDnsAddOn(),
+    new blueprints.KubeProxyAddOn(),
+    new blueprints.XrayAddOn())
+    .teams(new TeamPlatform(account), new TeamApplication('burnham',account),new TeamApplication('riker',account));
   
     const repoUrl = 'https://github.com/dmatthews-uturn/eks-blueprints-workloads.git';
 
