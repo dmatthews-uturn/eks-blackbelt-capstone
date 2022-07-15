@@ -17,14 +17,22 @@ export default class PipelineConstruct extends Construct {
     
     const clusterProvider = new blueprints.GenericClusterProvider({
             version: KubernetesVersion.V1_21,
-            autoscalingNodeGroups: [
+            managedNodeGroups: [
                 {
-                    id: "asg1",
-                    instanceType: new InstanceType('m5.large'),
-                    minSize: 3,
-                    maxSize: 10,
+                    id: "mng1",
+                    instanceTypes: [new InstanceType('m5.large')],
+                    minSize: 1,
+                    maxSize: 3,
                     desiredSize: 3,
                     nodeGroupSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT }
+                },
+                {
+                    id: "mng2",
+                    instanceTypes: [new InstanceType('t3.large'), new InstanceType('t3.t3.xlarge')],
+                    nodeGroupCapacityType: CapacityType.SPOT,
+                    minSize: 0,
+                    maxSize: 10,
+                    desiredSize: 0,
                 }
             ]
         });
