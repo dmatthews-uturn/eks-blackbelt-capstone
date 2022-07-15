@@ -20,7 +20,7 @@ export default class PipelineConstruct extends Construct {
             managedNodeGroups: [
                 {
                     id: "mng1",
-                    instanceTypes: [new InstanceType('m5.large')],
+                    instanceTypes: [new InstanceType('t3.large')],
                     minSize: 1,
                     maxSize: 10,
                     desiredSize: 3,
