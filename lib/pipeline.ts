@@ -19,7 +19,7 @@ export default class PipelineConstruct extends Construct {
             version: KubernetesVersion.V1_21,
             managedNodeGroups: [
                 {
-                    id: "mng1",
+                    id: "NodeGroup",
                     instanceTypes: [new InstanceType('t3.large')],
                     minSize: 1,
                     maxSize: 10,
