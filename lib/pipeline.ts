@@ -31,6 +31,7 @@ export default class PipelineConstruct extends Construct {
 
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
+    .clusterProvider(clusterProvider)
     .region(region)
     .addOns(new blueprints.CalicoAddOn,
     new blueprints.MetricsServerAddOn,
