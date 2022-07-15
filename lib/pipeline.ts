@@ -1,5 +1,8 @@
 // lib/pipeline.ts
-import * as cdk from 'aws-cdk-lib';
+import * as cdk from '@aws-quickstart/eks-blueprints/node_modules/aws-cdk-lib';
+import * as ec2 from "@aws-quickstart/eks-blueprints/node_modules/aws-cdk-lib/aws-ec2";
+import { InstanceType } from '@aws-quickstart/eks-blueprints/node_modules/aws-cdk-lib/aws-ec2';
+import { CapacityType, KubernetesVersion, NodegroupAmiType } from '@aws-quickstart/eks-blueprints/node_modules/aws-cdk-lib/aws-eks';
 import { Construct } from 'constructs';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import { TeamPlatform, TeamApplication } from '../teams';
@@ -11,6 +14,20 @@ export default class PipelineConstruct extends Construct {
     const account = props?.env?.account!;
     const region = props?.env?.region!;
     const env = { account, region }
+    
+    const clusterProvider = new blueprints.GenericClusterProvider({
+            version: KubernetesVersion.V1_21,
+            autoscalingNodeGroups: [
+                {
+                    id: "asg1",
+                    instanceType: new InstanceType('m5.large'),
+                    minSize: 3,
+                    maxSize: 10,
+                    desiredSize: 3,
+                    nodeGroupSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT }
+                }
+            ]
+        });
 
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
