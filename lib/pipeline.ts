@@ -40,8 +40,7 @@ export default class PipelineConstruct extends Construct {
     new blueprints.AwsLoadBalancerControllerAddOn(),
     new blueprints.VpcCniAddOn(),
     new blueprints.CoreDnsAddOn(),
-    new blueprints.KubeProxyAddOn(),
-    new blueprints.XrayAddOn())
+    new blueprints.KubeProxyAddOn())
     .teams(new TeamPlatform(account), new TeamApplication('burnham',account),new TeamApplication('riker',account));
   
     const repoUrl = 'https://github.com/dmatthews-uturn/eks-blueprints-workloads.git';
