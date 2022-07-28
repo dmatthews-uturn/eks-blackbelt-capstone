@@ -20,10 +20,10 @@ export default class PipelineConstruct extends Construct {
             managedNodeGroups: [
                 {
                     id: "NodeGroup",
-                    instanceTypes: [new InstanceType('t3.large')],
+                    instanceTypes: [new InstanceType('m5.large')],
                     minSize: 1,
                     maxSize: 10,
-                    desiredSize: 3,
+                    desiredSize: 2,
                     nodeGroupSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT }
                 }
             ]
